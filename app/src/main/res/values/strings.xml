@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">StreamingApplication</string>
+
+    <string name="title_activity_watching">WatchingActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+</resources>

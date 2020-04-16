@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainPage"
+    android:background="@android:color/black">
+
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageView"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="14dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="34dp"
+            android:text="Action"
+            android:textColor="@android:color/white"/>
+
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/movies_recyclerview"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="14dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="34dp"
+            android:text="Comedy"
+            android:textColor="@android:color/white" />
+
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/movies_recyclerview2"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="14dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="34dp"
+            android:text="Family"
+            android:textColor="@android:color/white" />
+
+
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+
+
+            app:srcCompat="@android:color/darker_gray" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/movies_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="241dp"
+            android:layout_below="@+id/textView1"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="37dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/movies_recyclerview2"
+            android:layout_width="match_parent"
+            android:layout_height="241dp"
+            android:layout_below="@+id/textView2"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="37dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/movies_recyclerview3"
+            android:layout_width="match_parent"
+            android:layout_height="241dp"
+            android:layout_below="@+id/textView3"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="37dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+
+
+
+    </RelativeLayout>
+
+
+
+
+
+
+</ScrollView>
