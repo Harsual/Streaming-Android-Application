@@ -1,17 +1,28 @@
 package com.example.streamingapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ScrollView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.tabs.TabLayout;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -25,262 +36,162 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Comparator;
+import java.util.Objects;
 
-public class MainPage extends AppCompatActivity implements RecyclerViewAdapter.OnNoteListener {
-    public static final String EXTRA_NUMBER = "com.example.streamingapplication.EXTRA_NUMBER";
-    static ArrayList<Movie_List> arrayList=new ArrayList<Movie_List>();
-    static ArrayList<simple_movies> action =new ArrayList<>();
-    static ArrayList<simple_movies> comedy =new ArrayList<>();
-    static ArrayList<simple_movies> family =new ArrayList<>();
-    private static final String TAG = "MainPageActivity";
-    RecyclerViewAdapter adapter;
-    static int []id_list= new int[20];
-    private Handler mainHandler = new Handler();
+public class MainPage extends AppCompatActivity{
+    BottomNavigationView bottomNav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_page);
+        setContentView(R.layout.activity_fragment_holder);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                new HomeFragment(),"MainTag").commit();
+
+        bottomNav = findViewById(R.id.bottom_navigation);
 
 
+        bottomNav.setOnNavigationItemSelectedListener(navListener);
 
-
-        /*for(int i=0;i<3;i++)
-        {
-            action.add(new simple_movies(454626,"lol"));
-            thriller.add(new simple_movies(454626,"lol2"));
-            drama.add(new simple_movies(454626,"lol3"));
-        }*/
-        initMainRecyclerView(action, R.id.movies_recyclerview);
-        initMainRecyclerView(comedy, R.id.movies_recyclerview2);
-        initMainRecyclerView(family, R.id.movies_recyclerview3);
-
-        int id = 454626;
-        ImageView img = setUpImage(id);
-
-
-        img.setOnClickListener(new View.OnClickListener() {
+        bottomNav.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
             @Override
-            public void onClick(View v) {
-                Toast.makeText(MainPage.this,Integer.toString(id),Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(MainPage.this,ViewingMovieInfo.class);
-                intent.putExtra(EXTRA_NUMBER,id);
-                startActivity(intent);
+            public void onNavigationItemReselected(@NonNull MenuItem menuItem) {
+
+                if(menuItem.getItemId() == R.id.nav_home)
+                {
+                    NestedScrollView nestedScrollView = findViewById(R.id.scroll_view);
+                    nestedScrollView.fullScroll(ScrollView.FOCUS_UP);
+                }
+
+                if(menuItem.getItemId() == R.id.nav_search)
+                {
+                    RecyclerView recyclerView = findViewById(R.id.searchRecylerView);
+                    LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                    if(layoutManager.findFirstVisibleItemPosition() != 0 && recyclerView.getAdapter().getItemCount() != 0)
+                    {
+                        recyclerView.smoothScrollToPosition(0);
+                    }
+
+                    else {
+                        SearchView searchView = findViewById(R.id.searchView);
+
+                        searchView.setIconifiedByDefault(false);
+                        searchView.setFocusable(true);
+                        searchView.setIconified(false);
+                        searchView.requestFocusFromTouch();
+                    }
+
+                }
 
             }
         });
 
-        getLists();
 
 
-
-        /*for(int i=0;i<3;i++)
-        {
-            arrayList.add(new Movie_List(i,"list"+ i));
-        }*/
-
-
-
-
-
-
-
-        //getLists();
-    }
-
-    private ImageView setUpImage(int id) {
-        String pstr = "http://192.168.1.34:8080/movies/image/"+id+".jpg";
-        ImageView poster = findViewById(R.id.imageView);
-
-
-        Picasso.get().load(pstr).placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_background)
-                .into(poster, new com.squareup.picasso.Callback() {
-
-                    @Override
-                    public void onSuccess() {
-                        System.out.println("yesss");
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        e.printStackTrace();
-                        System.out.println("NOOOOO");
-                    }
-                });
-
-        return poster;
-
-
-
-
-    }
-
-    private void getLists() {
-        getListsRunnable runnable = new getListsRunnable();
-        Thread tr = new Thread(runnable);
-        tr.start();
-
-    }
-
-    private void initMainRecyclerView(ArrayList<simple_movies> arr,int id){
-        Log.d(TAG, "initRecyclerView Main: ");
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        RecyclerView recyclerView = findViewById(id);
-        adapter = new RecyclerViewAdapter(this, arr,this);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(linearLayoutManager);
 
     }
 
     @Override
-    public void onNoteClick(int movie_id) {
-        Toast.makeText(MainPage.this,Integer.toString(movie_id),Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(MainPage.this,ViewingMovieInfo.class);
-        intent.putExtra(EXTRA_NUMBER,movie_id);
-        startActivity(intent);
+    public void onBackPressed() {
+        //super.onBackPressed();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if(getSupportFragmentManager().findFragmentByTag("MainTag")!= null){
+            //getSupportFragmentManager().beginTransaction().show(getSupportFragmentManager().findFragmentByTag("MainTag")).commit();
+            bottomNav.setSelectedItemId(R.id.nav_home);
+
+        }
+
+        /*if(fragmentManager.findFragmentByTag("SearchTag")!= null)
+            fragmentManager.beginTransaction().hide(Objects.requireNonNull(fragmentManager.findFragmentByTag("SearchTag"))).commit();
+
+        if(fragmentManager.findFragmentByTag("SettingsTag")!= null)
+            fragmentManager.beginTransaction().hide(Objects.requireNonNull(fragmentManager.findFragmentByTag("SettingsTag"))).commit();*/
+
     }
 
-    /*private String getInfo(int position) {
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                    Fragment selectedFragment = null;
+
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+
+                    String MainTag = "MainTag";
+                    String SearchTag = "SearchTag";
+                    String SettingsTag = "SettingsTag";
+
+                    switch (menuItem.getItemId()){
+                        case R.id.nav_home:
+                            selectedFragment = new HomeFragment();
+                            if(fragmentManager.findFragmentByTag(MainTag)!= null){
+                                fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag(MainTag)).commit();
+                            }else {
+                                fragmentManager.beginTransaction().add(R.id.fragment_container,selectedFragment,"MainTag").commit();
+                            }
+
+                            if(fragmentManager.findFragmentByTag(SearchTag)!= null)
+                            fragmentManager.beginTransaction().hide(Objects.requireNonNull(fragmentManager.findFragmentByTag("SearchTag"))).commit();
+
+                            if(fragmentManager.findFragmentByTag(SettingsTag)!= null)
+                            fragmentManager.beginTransaction().hide(Objects.requireNonNull(fragmentManager.findFragmentByTag("SettingsTag"))).commit();
+
+                            break;
+                        case R.id.nav_search:
+                            selectedFragment = new SearchFragment();
+                            if(fragmentManager.findFragmentByTag(SearchTag)!= null){
+                                fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag(SearchTag)).commit();
+                            }else {
+                                fragmentManager.beginTransaction().add(R.id.fragment_container,selectedFragment,"SearchTag").commit();
+                            }
+
+                            if(fragmentManager.findFragmentByTag(MainTag)!= null)
+                            fragmentManager.beginTransaction().hide(Objects.requireNonNull(fragmentManager.findFragmentByTag("MainTag"))).commit();
+
+                            if(fragmentManager.findFragmentByTag(SettingsTag)!= null)
+                            fragmentManager.beginTransaction().hide(Objects.requireNonNull(fragmentManager.findFragmentByTag("SettingsTag"))).commit();
 
 
-    }*/
-
-    class getListsRunnable implements  Runnable {
 
 
 
-        @Override
-        public void run() {
+                            break;
+                        case R.id.nav_list:
+                            selectedFragment = new SettingsFragment();
+                            if(fragmentManager.findFragmentByTag(SettingsTag)!= null){
+                                fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag(SettingsTag)).commit();
+                            }else {
+                                fragmentManager.beginTransaction().add(R.id.fragment_container,selectedFragment,"SettingsTag").commit();
+                            }
 
-            InputStream inputStream = null;
-            try {
+                            if(fragmentManager.findFragmentByTag(SearchTag)!= null)
+                            fragmentManager.beginTransaction().hide(Objects.requireNonNull(fragmentManager.findFragmentByTag("SearchTag"))).commit();
 
-                URL url = new URL("http://192.168.1.34:8080/movies/genres");
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                //bufferedReader.skip(20);
-                String line ="";
-                String data = line;
+                            if(fragmentManager.findFragmentByTag(MainTag)!= null)
+                            fragmentManager.beginTransaction().hide(Objects.requireNonNull(fragmentManager.findFragmentByTag("MainTag"))).commit();
 
 
 
+                            break;
 
-                while(line!=null) {
-                        line = bufferedReader.readLine();
-                        data = data + line;
 
+
+                    }
+
+                return true;
 
                 }
 
-                JSONArray JA = new JSONArray(data);
 
-                int counter = 0;
-
-
-
-
-                    for(int j=0; j<JA.length();j++) {
-
-                        JSONObject JO = JA.getJSONObject(j);
-
-                        switch (JO.getInt("genre")) {
-                                case 28:
-                                    action.add(new simple_movies(JO.getInt("id"), JO.getString("movie_name")));
-                                    break;
-                                case 35:
-                                    comedy.add(new simple_movies(JO.getInt("id"), JO.getString("movie_name")));
-                                    break;
-                                case 10751:
-                                    family.add(new simple_movies(JO.getInt("id"), JO.getString("movie_name")));
-                                    break;
-                                default:
-
-                            }
-
-
-
-
-
-
-                    }
-
-
-
-
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-
-            }finally {
-                try { if (inputStream != null) inputStream.close(); } catch(IOException e) {}
-                mainHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        initMainRecyclerView(action, R.id.movies_recyclerview);
-                        initMainRecyclerView(comedy, R.id.movies_recyclerview2);
-                        initMainRecyclerView(family, R.id.movies_recyclerview3);
-                    }
-                });
-
-            }
-
-
-
-
-
-
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-    class Movie_List
-    {
-
-        int id;
-        String listName;
-        int [] movie_ids = new int[20];
-
-        Movie_List(int id,String listname){
-            this.id = id;
-            this.listName = listname;
-        }
-
-    }
-
-    class simple_movies
-    {
-
-        int id;
-        String movieName;
-
-        simple_movies(int id,String MovieName){
-            this.id = id;
-            this.movieName = MovieName;
-        }
-
-
-
-    }
-
+            };
 
 
 

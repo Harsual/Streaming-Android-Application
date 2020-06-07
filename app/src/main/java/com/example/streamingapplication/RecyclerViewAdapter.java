@@ -24,14 +24,14 @@ import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     private static final String TAG = "RecyclerViewAdapter";
-    private ArrayList<MainPage.Movie_List> movie_lists ;
-    private ArrayList<MainPage.simple_movies> movies;
+    private ArrayList<HomeFragment.Movie_List> movie_lists ;
+    private ArrayList<HomeFragment.simple_movies> movies;
     private Context mContext;
     public ImageView poster;
     private OnNoteListener mNoteListener;
 
 
-    public RecyclerViewAdapter(Context mContext, ArrayList<MainPage.simple_movies> mMovies,OnNoteListener onNoteListener)  {
+    public RecyclerViewAdapter(Context mContext, ArrayList<HomeFragment.simple_movies> mMovies,OnNoteListener onNoteListener)  {
         this.movies = mMovies;
         this.mContext = mContext;
         this.mNoteListener = onNoteListener;
