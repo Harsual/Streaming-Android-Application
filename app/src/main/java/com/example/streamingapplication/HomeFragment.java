@@ -101,6 +101,9 @@ public class HomeFragment extends Fragment implements  RecyclerViewAdapter.OnNot
             }
         });
 
+
+
+        if(arrayList.size() == 0)
         loadData();
 
         initMainRecyclerView(arrayList,R.id.movies_recyclerview_mylist);
@@ -123,6 +126,7 @@ public class HomeFragment extends Fragment implements  RecyclerViewAdapter.OnNot
             }
         });
 
+        if(family.size()==0)
         getLists();
 
     }

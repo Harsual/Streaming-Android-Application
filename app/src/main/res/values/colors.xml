@@ -8,4 +8,6 @@
     <color name="red">#F9FF0000</color>
     <color name="red2">#FF0000</color>
     <color name="gray">#D5353434</color>
+    <color name="HD_gray">#2E2E2E</color>
+    <color name="textGray">#979797</color>
 </resources>

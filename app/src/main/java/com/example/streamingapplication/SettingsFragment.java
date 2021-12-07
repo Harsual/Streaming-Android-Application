@@ -1,5 +1,7 @@
 package com.example.streamingapplication;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
@@ -28,9 +30,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.settings_screen, rootKey);
 
-        Preference preference = findPreference("about");
+        Preference preference1 = findPreference("about");
+        Preference preference2 = findPreference("exit");
 
-        preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        preference1.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 openDialog();
@@ -40,6 +43,22 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             }
         });
 
+
+        preference2.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                OpenLogIn();
+
+                return false;
+            }
+        });
+
+    }
+
+    private void OpenLogIn() {
+        Intent intent = new Intent(getActivity(),LogIn.class);
+        //intent.putExtra(EXTRA_NUMBER,similarMovies.get(i).id);
+        startActivity(intent);
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.example.streamingapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -42,7 +44,7 @@ import static com.example.streamingapplication.HomeFragment.EXTRA_NUMBER;
 
 
 
-public class ViewingMovieInfo extends AppCompatActivity {
+public class ViewingMovieInfo extends AppCompatActivity implements  RecyclerViewAdapter.OnNoteListener {
 
 
     ImageButton addButton;
@@ -75,39 +77,21 @@ public class ViewingMovieInfo extends AppCompatActivity {
         ConstraintLayout CLout= findViewById(R.id.Lout);
         addButton = findViewById(R.id.addtolist);
         likeButton = findViewById(R.id.like);
-        similarImage1 = findViewById(R.id.additional_movie1);
-        similarImage2 = findViewById(R.id.additional_movie2);
-        similarImage3 = findViewById(R.id.additional_movie3);
+        ImageButton imageButton = findViewById(R.id.imageButton);
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OpenMain();
+            }
+        });
+
 
         addButton.setClickable(false);
         likeButton.setClickable(false);
-        similarImage1.setClickable(false);
-        similarImage2.setClickable(false);
-        similarImage3.setClickable(false);
-
-        similarImage1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openSameActivity(0);
-
-            }
-        });
-
-        similarImage2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openSameActivity(1);
-
-            }
-        });
 
 
-        similarImage3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openSameActivity(2);
-            }
-        });
+
 
         likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,6 +101,7 @@ public class ViewingMovieInfo extends AppCompatActivity {
 
                 if(isLiked)
                 {
+                    Toast.makeText(ViewingMovieInfo.this, "removed Like",Toast.LENGTH_LONG).show();
                     likedList.remove(likePosition);
 
                     likeButton.setColorFilter(Color.argb(255,255,255,255));
@@ -125,6 +110,7 @@ public class ViewingMovieInfo extends AppCompatActivity {
                 }
                 else
                 {
+                    Toast.makeText(ViewingMovieInfo.this, "Added Like",Toast.LENGTH_LONG).show();
                     likedList.add(movie2);
                     likeButton.setColorFilter(Color.argb(255,24,65,100));
                     isLiked = true;
@@ -177,6 +163,12 @@ public class ViewingMovieInfo extends AppCompatActivity {
         loadData();
         checkForButton(movie_id);
         getFromDB(movie_id);
+    }
+
+    private void OpenMain() {
+        Intent intent = new Intent(this,MainPage.class);
+        startActivity(intent);
+
     }
 
     private void removeLikeFromDB() {
@@ -532,6 +524,26 @@ public class ViewingMovieInfo extends AppCompatActivity {
 
     }
 
+    public void setUpRecyclerView( ArrayList<HomeFragment.simple_movies> List) {
+        RecyclerView recyclerView = findViewById(R.id.similarRecycler);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, List,this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(layoutManager);
+
+
+
+    }
+
+    @Override
+    public void onNoteClick(int movie_id) {
+        //Toast.makeText(MainPage.this,Integer.toString(movie_id),Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this,ViewingMovieInfo.class);
+        intent.putExtra(EXTRA_NUMBER,movie_id);
+        startActivity(intent);
+    }
+
 
     //responsible for attaching the info to the UI. must be called after getListInfo function.
     private void displayInfo(Movie movie) {
@@ -550,6 +562,7 @@ public class ViewingMovieInfo extends AppCompatActivity {
         txtview3.setText(movie.runtime);
         txtview4.setText(movie.overview);
         txtview5.setText("Director: "+movie.director+'\n' +"Cast: "+ movie.notable_cast);
+        setUpRecyclerView(similarMovies);
         movie2 = new HomeFragment.simple_movies(movie.id,movie.name);
 
         if(isAdded)
@@ -582,80 +595,7 @@ public class ViewingMovieInfo extends AppCompatActivity {
                 });
 
 
-        //Loading additional movie images.
-        pstr = "http://192.168.1.34:8080/movies/image/"+similarMovies.get(0).id+".jpg";
-        Picasso.get().load(pstr).placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_background)
-                .into(similarImage1, new com.squareup.picasso.Callback() {
 
-                    @Override
-                    public void onSuccess() {
-                        System.out.println("yesss");
-                        similarImage1.setClickable(true);
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        e.printStackTrace();
-                        System.out.println("NOOOOO");
-                    }
-                });
-
-
-        /*Intent i = new Intent(OldActivity.this, NewActivity.class);
-// set the new task and clear flags
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(i);*/
-
-        if(similarMovies.size() >1) {
-            pstr = "http://192.168.1.34:8080/movies/image/" + similarMovies.get(1).id + ".jpg";
-
-            Picasso.get().load(pstr).placeholder(R.drawable.ic_launcher_background)
-                    .error(R.drawable.ic_launcher_background)
-                    .into(similarImage2, new com.squareup.picasso.Callback() {
-
-                        @Override
-                        public void onSuccess() {
-                            System.out.println("yesss");
-                            similarImage2.setClickable(true);
-                        }
-
-                        @Override
-                        public void onError(Exception e) {
-                            e.printStackTrace();
-                            System.out.println("NOOOOO");
-                        }
-                    });
-
-        }else {
-            similarImage2.setVisibility(View.INVISIBLE);
-        }
-
-
-        if(similarMovies.size() > 2) {
-            pstr = "http://192.168.1.34:8080/movies/image/" + similarMovies.get(2).id + ".jpg";
-
-            Picasso.get().load(pstr).placeholder(R.drawable.ic_launcher_background)
-                    .error(R.drawable.ic_launcher_background)
-                    .into(similarImage3, new com.squareup.picasso.Callback() {
-
-                        @Override
-                        public void onSuccess() {
-                            System.out.println("yesss");
-                            similarImage3.setClickable(true);
-                        }
-
-                        @Override
-                        public void onError(Exception e) {
-                            e.printStackTrace();
-                            System.out.println("NOOOOO");
-                            similarImage3.setClickable(false);
-                        }
-                    });
-
-        } else {
-            similarImage3.setVisibility(View.INVISIBLE);
-        }
 
 
 

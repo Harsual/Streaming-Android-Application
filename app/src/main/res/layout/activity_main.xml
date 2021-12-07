@@ -46,8 +46,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="user" />
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/password"
@@ -59,8 +58,7 @@
 
 
         android:ems="10"
-        android:inputType="textPassword"
-        android:text="password" />
+        android:inputType="textPassword" />
 
     <TextView
         android:id="@+id/warning"

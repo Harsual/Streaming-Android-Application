@@ -17,4 +17,7 @@
         app:key="about"
         app:title="about us"/>
 
+    <Preference
+        app:key="exit"
+        app:title="log out"/>
 </PreferenceScreen>

@@ -40,6 +40,10 @@ public class LogIn extends AppCompatActivity {
     TextView textView;
     Button btn;
 
+    @Override
+    public void onBackPressed() {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,7 @@ public class LogIn extends AppCompatActivity {
         username = findViewById(R.id.Username);
         password = findViewById(R.id.password);
         textView = findViewById(R.id.warning);
+        textView.setText("Username or password is incorrect");
         relativeLayout = findViewById(R.id.innerRL);
 
 
@@ -94,7 +99,7 @@ public class LogIn extends AppCompatActivity {
 
             System.out.print(root.toString());
 
-            textView.setText(root.toString());
+            //textView.setText(root.toString());
 
             return root.toString();
         }catch (JSONException e){

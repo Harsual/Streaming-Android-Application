@@ -13,6 +13,23 @@
         android:orientation="vertical"
         tools:context=".ViewingMovieInfo">
 
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="18dp"
+            app:srcCompat="@drawable/ic_close_black_24dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/similarRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/moreLikeThis"
+            android:layout_marginTop="@dimen/distanceBetweenGenreAndList"/>
+
         <Button
             android:id="@+id/play_button"
             android:layout_width="386dp"
@@ -81,7 +98,8 @@
             android:layout_marginTop="10dp"
             android:paddingHorizontal="8dp"
             android:text="details"
-            android:textColor="@android:color/white" />
+            android:textColor="@color/textGray"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/moreLikeThis"
@@ -93,53 +111,11 @@
             android:text="MORE LIKE THIS"
             android:textColor="@android:color/white" />
 
-        <ImageView
-            android:id="@+id/additional_movie1"
-            android:layout_width="128dp"
-            android:layout_height="171dp"
 
-            android:layout_below="@id/moreLikeThis"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="8dp"
-            app:srcCompat="@android:color/darker_gray" />
-
-
-        <ImageView
-            android:id="@+id/additional_movie2"
-            android:layout_width="122dp"
-            android:layout_height="171dp"
-
-            android:layout_below="@id/moreLikeThis"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="8dp"
-            android:layout_toEndOf="@+id/additional_movie1"
-            app:srcCompat="@android:color/darker_gray" />
-
-        <ImageView
-            android:id="@+id/additional_movie3"
-            android:layout_width="128dp"
-            android:layout_height="171dp"
-
-
-            android:layout_below="@id/moreLikeThis"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginStart="17dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_toEndOf="@+id/additional_movie2"
-            app:srcCompat="@android:color/darker_gray" />
-
-
-        <RelativeLayout
+        <!--<RelativeLayout
             android:id="@+id/relative_Lout"
-            android:layout_width="30dp"
-            android:layout_height="20dp"
+            android:layout_width="31dp"
+            android:layout_height="18dp"
             android:layout_below="@id/Poster"
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
@@ -149,21 +125,36 @@
 
             <ImageView
                 android:id="@+id/ageRating_background"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:srcCompat="@android:color/darker_gray" />
+                android:layout_width="30dp"
+                android:layout_height="20dp"
+                app:srcCompat="@android:color/darker_gray">
+
+
+
+            </ImageView>-->
 
             <TextView
                 android:id="@+id/age_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:gravity="center"
+                android:layout_below="@+id/Poster"
                 android:text="+16"
-                android:textColor="@android:color/white" />
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:autoSizeTextType="uniform"
+                android:textColor="@android:color/white"
+                android:layout_toEndOf="@+id/textView_year"
+                android:layout_toRightOf="@+id/textView_year"
+                android:background="@color/HD_gray"/>
+
+                <!--android:layout_centerInParent="true"
+                android:gravity="center"
+
+                -->
 
 
-        </RelativeLayout>
+        <!--</RelativeLayout>-->
 
         <TextView
             android:id="@+id/textView_runtime"
@@ -173,8 +164,8 @@
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            android:layout_toEndOf="@+id/relative_Lout"
-            android:layout_toRightOf="@+id/relative_Lout"
+            android:layout_toEndOf="@+id/age_rating"
+            android:layout_toRightOf="@+id/age_rating"
             android:gravity="center"
             android:text="runtime"
             android:textColor="@android:color/white" />

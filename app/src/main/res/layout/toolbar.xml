@@ -4,11 +4,15 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/gray"
+    android:background="@color/HD_gray"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     app:titleTextColor="#FFFFFF"
     app:layout_collapseMode="pin"
     app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
    >
+
+
+
+
 
 </androidx.appcompat.widget.Toolbar>
